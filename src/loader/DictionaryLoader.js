@@ -21,6 +21,8 @@ var path = require("path");
 var async = require("async");
 var DynamicDictionaries = require("../dict/DynamicDictionaries");
 
+const gzipExtension = "gz__AAPT_GO_AWAY__";
+
 /**
  * DictionaryLoader base constructor
  * @param {string} dic_path Dictionary path
@@ -47,7 +49,7 @@ DictionaryLoader.prototype.load = function (load_callback) {
     async.parallel([
         // Trie
         function (callback) {
-            async.map([ "base.dat.gz", "check.dat.gz" ], function (filename, _callback) {
+            async.map([ `base.dat.${gzipExtension}`, `check.dat.${gzipExtension}` ], function (filename, _callback) {
                 loadArrayBuffer(path.join(dic_path, filename), function (err, buffer) {
                     if(err) {
                         return _callback(err);
@@ -67,7 +69,7 @@ DictionaryLoader.prototype.load = function (load_callback) {
         },
         // Token info dictionaries
         function (callback) {
-            async.map([ "tid.dat.gz", "tid_pos.dat.gz", "tid_map.dat.gz" ], function (filename, _callback) {
+            async.map([ `tid.dat.${gzipExtension}`, `tid_pos.dat.${gzipExtension}`, `tid_map.dat.${gzipExtension}` ], function (filename, _callback) {
                 loadArrayBuffer(path.join(dic_path, filename), function (err, buffer) {
                     if(err) {
                         return _callback(err);
@@ -88,7 +90,7 @@ DictionaryLoader.prototype.load = function (load_callback) {
         },
         // Connection cost matrix
         function (callback) {
-            loadArrayBuffer(path.join(dic_path, "cc.dat.gz"), function (err, buffer) {
+            loadArrayBuffer(path.join(dic_path, `cc.dat.${gzipExtension}`), function (err, buffer) {
                 if(err) {
                     return callback(err);
                 }
@@ -99,7 +101,7 @@ DictionaryLoader.prototype.load = function (load_callback) {
         },
         // Unknown dictionaries
         function (callback) {
-            async.map([ "unk.dat.gz", "unk_pos.dat.gz", "unk_map.dat.gz", "unk_char.dat.gz", "unk_compat.dat.gz", "unk_invoke.dat.gz" ], function (filename, _callback) {
+            async.map([ `unk.dat.${gzipExtension}`, `unk_pos.dat.${gzipExtension}`, `unk_map.dat.${gzipExtension}`, `unk_char.dat.${gzipExtension}`, `unk_compat.dat.${gzipExtension}`, `unk_invoke.dat.${gzipExtension}` ], function (filename, _callback) {
                 loadArrayBuffer(path.join(dic_path, filename), function (err, buffer) {
                     if(err) {
                         return _callback(err);
